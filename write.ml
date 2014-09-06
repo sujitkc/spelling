@@ -22,7 +22,7 @@ let writeLaTeX qmatrix amatrix =
     in
       let writeStrings slist =
         let rec iter = function
-          [] -> ()
+          []     -> ()
         | h :: t ->
           begin
             (Printf.fprintf oc "%s\n" h);
@@ -78,3 +78,5 @@ let generate () =
   let (qm, am) = Spelling.placeAllStrings [ "dog"; "cat"; "tiger"; "man"; "zebra"; "parrot" ]
   in
     writeLaTeX qm am
+
+let _ = generate()
