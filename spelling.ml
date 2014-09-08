@@ -42,9 +42,10 @@ let setValue m r c v =
 
 let initMatrix m =
   let randomChar () =
-    [| 'a'; 'b'; 'c'; 'd'; 'e'; 'f'; 'g'; 'h'; 'i'; 'j'; 'k'; 'l'; 'm';
+    let alphabets = [| 'a'; 'b'; 'c'; 'd'; 'e'; 'f'; 'g'; 'h'; 'i'; 'j'; 'k'; 'l'; 'm';
        'n'; 'o'; 'p'; 'q'; 'r'; 's'; 't'; 'u'; 'v'; 'w'; 'x'; 'y'; 'z'
-    |].(Random.int 26)
+    |]
+    in alphabets.(Random.int (Array.length alphabets))
   in
   for r = 0 to (Array.length m - 1) do
     for c = 0 to (Array.length m) - 1 do
@@ -268,7 +269,6 @@ let test_placeEntry () =
 let t1 () =
   let sl = [ "dog"; "cat"; "tiger"; "man"; "zebra"; "parrot" ]
   in
-  
     let (q, a) = placeAllStrings sl
     in
     begin

@@ -1,7 +1,6 @@
 
-let writeLaTeX qmatrix amatrix =
-  let file = "pdf/example.tex"
-  and prefix = [
+let writeLaTeX qmatrix amatrix outfile =
+  let prefix = [
     "\\documentclass{beamer}";
     "\\usetheme{default}";
     "\\usepackage{xcolor}";
@@ -18,7 +17,7 @@ let writeLaTeX qmatrix amatrix =
     "\\end{document}";
   ]
   in
-    let oc = open_out file
+    let oc = open_out outfile
     in
       let writeStrings slist =
         let rec iter = function
@@ -74,9 +73,51 @@ let writeLaTeX qmatrix amatrix =
           close_out oc
         end
 
-let generate () =
-  let (qm, am) = Spelling.placeAllStrings [ "dog"; "cat"; "tiger"; "man"; "zebra"; "parrot" ]
-  in
-    writeLaTeX qm am
+let inputLine ic =
+  try Some (input_line ic)
+  with End_of_file -> None
 
-let _ = generate()
+let readWords ic =
+  let rec iter acc =
+    match inputLine ic with
+    | Some line -> iter (line::acc)
+    | None -> (List.rev acc)
+  in
+  iter []
+
+let readInput filename =
+  let ic = open_in filename in
+    let lines = readWords ic in
+      begin
+        close_in ic;
+        lines
+      end
+
+let generate infile outfile =
+  let (qm, am) = Spelling.placeAllStrings (readInput infile)
+  in
+    writeLaTeX qm am outfile
+
+let _ =
+    let output filename =
+      for i = 1 to 10 do
+        let outfile = "output/" ^ filename ^ "-" ^ (string_of_int i) ^ ".tex"
+        in generate (filename ^ ".txt") outfile
+      done
+    in
+    begin
+      output "animals";
+      output "vegetables";
+      output "fruits"
+    end
+
+(* Test cases *)
+let printStringList slist =
+  List.iter (fun s -> (print_string (s ^ "\n"))) slist
+
+let test_readInput () =
+  let infile = "input.txt"
+  in
+    let slist = (readInput infile)
+    in
+    printStringList slist; ()
