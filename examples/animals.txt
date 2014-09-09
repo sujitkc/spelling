@@ -1,0 +1,6 @@
+dog
+cat
+tiger
+man
+zebra
+parrot
