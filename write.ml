@@ -101,8 +101,19 @@ let generate infile outfile =
 let _ =
     let output filename =
       for i = 1 to 10 do
-        let outfile = "output/" ^ filename ^ "-" ^ (string_of_int i) ^ ".tex"
-        in generate (filename ^ ".txt") outfile
+        let texfile = "temp/" ^ filename ^ "-" ^ (string_of_int i) ^ ".tex"
+        in
+          begin
+            generate (filename ^ ".txt") texfile;
+            let cmd1 = "pdflatex -output-directory temp " ^ texfile 
+            and cmd2 = "cp temp/" ^  filename ^ "-" ^ (string_of_int i) ^ ".pdf output/"
+            and cmd3 = "rm temp/*" in
+            begin
+              let _ = (Sys.command cmd1) in ();
+              let _ = (Sys.command cmd2) in ();
+              let _ = (Sys.command cmd3) in ()
+            end
+          end
       done
     in
     begin
