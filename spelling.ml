@@ -260,7 +260,6 @@ let test_placeEntry () =
     }
   }
 
-
   in
   placeEntry m e1;
   placeEntry m e2;
